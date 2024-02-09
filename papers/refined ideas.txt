@@ -1,0 +1,57 @@
+reproduce results from selected papers and discuss them.
+Then think of some complications, discuss them.
+
+idea is that we will have a collection of a few small/little projects which can interact with eachother to make a relatively nice big project. Personally alongside learning some cool physics programming methods I would like to end up with a cool collection of graphs and cool pictures of fluid behaviour. 
+
+Project Title -- Recreating atmospheric phenomena with real time 2d fluid sims (i think 3d would take too long to run)
+
+(i realise the following has a lot of things to do but i think it might be good to have a lot of options and when we get to the stage of trying these out we can pick and choose to do which of these we can given time permits)
+including but not limited to: 
+- fluid waves (observe density field after introducting more pressure) 
+- tsunami modelling (PC)
+- fluid interfaces (like water and air)
+- turbulence (PC) (might be too hard)
+- clouds (ink in fluid for simple sim) (with and without viscocity and compression)
+- hurricanes (ink in fluid for simple sim) with and withou viscoity and compression
+some misc things we could do (rough ideas):
+- jupiter storm on sphere (3d tho)
+- shockwaves (Princeton companion)
+
+in each of the above we could tweak the parameters of governing equations or algorithms to possibly observe:
+- "phase transitions" (when a certain parameter is tweaked, maybe behaviour of fluid changes drastically)
+- figure out correlation between parameters
+- what serves as a good approximation to reduce computing time or to observe a property of the system which is most important to us
+- funny artefacts
+- bugs lol
+
+and then comment on impact of these models on the real world and some history behind them
+
+Fun questions -- 
+- must have some vorticity on sphere (hairy ball theorem)?
+- how drastically does adding viscocity and compressibility impact the global behaviour of the fluid (both 2d square and 2d sphere) (inspired by doing half of fluid mechanics module without these properties)
+- figure out how and what determines convection segmentation on sphere (maybe only 3d feature, and i think its caused by corriolis force)
+
+Rough outline of steps involved in project:
+
+2d fluid in square sim:
+- discretise Navier stokes equations
+- implement simple fluid sim in code
+  - tweak parameters, comment on changes, play around with system,
+  - could try to reproduce wave characteristics like waves
+  - 
+- 
+
+2d sim on sphere
+- discretise shperical coordinte version of navier stokes
+- 
+
+
+
+
+
+
+
+
+
+
+

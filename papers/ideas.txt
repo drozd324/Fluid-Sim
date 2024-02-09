@@ -1,0 +1,33 @@
+scope of project - 
+reproduce results from paper?? and discuss them??
+and then just think of some complications??
+
+need one big result at the end or can be a collection of lots of little thinngs?
+
+project question
+how well can we use real time 2d fluid sim on sphere to qualitatively visualise features formation (like cloud shape, hurricanes, tornados? ( maybe tornados a bit too small) in the atmostphere
+
+vorticity ? could sphere prevent irrotational fluid??
+
+spin sphere, coriolis force????
+convection segmentation (john brennan photo)
+
+funny atmosphere things? (to google)
+
+first make 2d fluid sim on square, introduce fun features like viscocity, compressibility as you go
+- math into discrete version
+- visaualisation
+
+then move to 2d fluid on spherical surface, then to beggining of notepad
+- math into spherical discrete verion
+- visualisation
+
+3d fluid in box then 3d  surface on sphere
+
+machine learning in fluid dynamics, training approximating functions, might be too computationally expensive depending on if fluid is 2d or 3d, 3d will take ages.
+
+what kind of want as a end goal is to have a collection of pretty simulations of fluids doing fluid stuff
+
+jupiter storm on sphere, fluid sim more 3d time permitting
+
+

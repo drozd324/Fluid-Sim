@@ -1,0 +1,14 @@
+- Learn about and chose dicretisation scheme; finite volume, finite element... Discuss which one we used and why
+- implent simple example of using fem ike poisson equ to learn how to do this for fluid stuff
+- Implement NS equations
+- square/torus fluid flow
+- analysis
+- sphere fluid flow
+- analysis
+
+
+main tasks
+- learn how to Implement fem method
+- do for square grid sim torus,
+- do for sphere sim
+- if done look at papers
