@@ -1,60 +1,88 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 
-# domain for calculating inetgrals
+# domain for calculating integrals
 N = 100
-domain = np.linspace(0, 1, N)
+x = np.linspace(0, 1, N)
+y = np.linspace(0, 1, N)
+X, Y = np.meshgrid(x, y)
+#print(X.shape)
+#print(Y.shape)
 
 # elements to solve
-h = .1
-x_len = int(1/h)
-num_elements = (x_len)**2
-elements = np.mgrid[0: 1+h: h, 0: 1+h: h].reshape(2, -1).T
+H = 5
+h = 1/H
+a = np.linspace(0, 1, H)
+b = np.linspace(0, 1, H)
+num_elements = H**2
+elements = np.array(np.meshgrid(a, b)).reshape(2, -1).T
 
 # 1dim hat basis function
-def phi(j, x):
-    if j==0 or j==1:# 0,1 are the boundary conditions, ie 
-        return np.zeros(x.shape)
+def phi(i, x):
+    #print(i)
+    if i==0 or i==1:# 0,1 are the boundary conditions
+        return 0 * x
     else:
-        return np.piecewise(x, [x <= (j-h), (x > (j-h))&(x <= j)        , (x > (j))&(x < (j+h))          , x>=(j+h)],
-                               [0         , lambda x: (x/h) + (1-(j/h)) , lambda x: (-x/h) + (1+(j/h))   , 0       ])
-    
+        return np.piecewise(x, [x <= (i-h), (x > (i-h))&(x <= i)        , (x > (i))&(x < (i+h))          , x>=(i+h)],
+                               [0         , lambda x: (x/h) + (1-(i/h)) , lambda x: (-x/h) + (1+(i/h))   , 0       ])
+
 # 2dim hat basis function
-def phi_2d(j, x):
-    j0, j1 = j
-    x0, x1 = x
-    return phi(j0, x0) * phi(j1, x1)
+def phi_2d(i, x):
+    return phi(i[0], x[0]) * phi(i[1], x[1])
 
-def grad_phi(j, x):
-    return np.gradient(phi(j, x))
 
-def grad_phi_2d(j, x):
-    return np.gradient(phi_2d(j, x))
+def grad_phi(i, x):
+    if i==0 or i==1:# 0,1 are the boundary conditions
+        return 0 * x
+    else:
+        return np.piecewise(x, [x <= (i-h), (x > (i-h))&(x <= i), (x > (i))&(x < (i+h)), x>=(i+h)],
+                               [0         , 1/h                 , -1/h                 , 0       ])
+        
+def grad_phi_2d(i, x):
+    return np.array([grad_phi(i[0], x[0]) * phi(i[1], x[1]), phi(i[0], x[0]) * grad_phi(i[1], x[1])])
 
 def f(x):
     return -1
 
-# matrices to solve
 A = np.zeros((num_elements, num_elements))
+print(A.shape)
 F = np.zeros((num_elements))
 
-# main calculation loop
-for i in range(num_elements):
-    print(elements[i])
-    num1 = np.trapz(phi_2d(elements[i], domain) * f(domain), dx=h)
-    num2 = np.trapz(num1, dx=h)
-    F[i] = num2
+def func1(i, x):
+    return phi_2d(i, x) * f(x)
 
-    for j in range(num_elements):
-        num1 = np.trapz(grad_phi_2d(elements[i], domain) * grad_phi_2d(elements[j], domain), dx=h)
-        num2 = np.trapz(num1, dx=h)
-        A[i, j] = num2
+def func2(i, a, x):
+    return grad_phi(i[0], x[0]) * phi(i[1], x[1]) * grad_phi(a[0], x[0]) * phi(a[1], x[1])  +  phi(i[0], x[0]) * grad_phi(i[1], x[1]) * phi(a[0], x[0]) * grad_phi(a[1], x[1])
+
+#def func2(i, a, x):
+#    return grad_phi_2d(i, x) * grad_phi_2d(a, x)
+
+# main calculation loop 
+# to optimise: make use of symmetric matrix fact
+#              sparse matrix solving?
+#              calculate integral only on where the integrand is defined               
+for i, ele0 in enumerate(elements):
+    integrand0 = func1(ele0, (X, Y))
+    F[i] = np.trapz(np.trapz(integrand0, y, axis=0), x, axis=0)
+    
+    percentage = round(100 * ((i)/(num_elements-1)), 1)
+    print(f"{percentage}%", end="\r")
+
+    for j, ele1 in enumerate(elements):
+        integrand1 = func2(ele0, ele1, (X, Y))
+        A[i, j] = np.trapz(np.trapz(integrand1, y, axis=0), x, axis=0)
 
 # this is soling the matrix equation Ax = F, A a matrix, x a vector ie the solution at each element, F a vector
-solution = np.linalg.lstsq(A, F) # lqst because this aproximate matrix solution has more than one solution
+solution = np.linalg.lstsq(A, F, rcond=None)
 
-#plt.xlabel("x")
-#plt.ylabel("u")
-#plt.title(r'$ \nabla{^2u(x)} = u^{\prime\prime} (x) = f(x)$')
-plt.imshow(solution.reshape(num_elements, num_elements))
-plt.show()
+plt.matshow(A)
+plt.colorbar()
+#plt.show()
+
+fig = go.Figure(go.Surface(
+    x = x,
+    y = y,
+    z = solution[0].reshape(H, H)
+    ))
+fig.show()
