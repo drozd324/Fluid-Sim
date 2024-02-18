@@ -1,17 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import time
 
 # domain for calculating integrals
 N = 100
 x = np.linspace(0, 1, N)
 y = np.linspace(0, 1, N)
-X, Y = np.meshgrid(x, y)
-#print(X.shape)
-#print(Y.shape)
+X, Y = np.meshgrid(x, y) 
 
 # elements to solve
-H = 5
+H = 10
 h = 1/H
 a = np.linspace(0, 1, H)
 b = np.linspace(0, 1, H)
@@ -31,7 +30,7 @@ def phi(i, x):
 def phi_2d(i, x):
     return phi(i[0], x[0]) * phi(i[1], x[1])
 
-
+# 1 dim ie:  d/dx phi
 def grad_phi(i, x):
     if i==0 or i==1:# 0,1 are the boundary conditions
         return 0 * x
@@ -61,7 +60,8 @@ def func2(i, a, x):
 # main calculation loop 
 # to optimise: make use of symmetric matrix fact
 #              sparse matrix solving?
-#              calculate integral only on where the integrand is defined               
+#              calculate integral only on where the integrand is defined   
+t0 = time.time()             
 for i, ele0 in enumerate(elements):
     integrand0 = func1(ele0, (X, Y))
     F[i] = np.trapz(np.trapz(integrand0, y, axis=0), x, axis=0)
@@ -73,12 +73,11 @@ for i, ele0 in enumerate(elements):
         integrand1 = func2(ele0, ele1, (X, Y))
         A[i, j] = np.trapz(np.trapz(integrand1, y, axis=0), x, axis=0)
 
+t1 = time.time()
+print(f"time taken: {t1-t0} seconds")
+
 # this is soling the matrix equation Ax = F, A a matrix, x a vector ie the solution at each element, F a vector
 solution = np.linalg.lstsq(A, F, rcond=None)
-
-plt.matshow(A)
-plt.colorbar()
-#plt.show()
 
 fig = go.Figure(go.Surface(
     x = x,
@@ -86,3 +85,7 @@ fig = go.Figure(go.Surface(
     z = solution[0].reshape(H, H)
     ))
 fig.show()
+
+plt.matshow(A)
+plt.colorbar()
+plt.show()

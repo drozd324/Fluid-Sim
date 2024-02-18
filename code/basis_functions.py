@@ -75,9 +75,12 @@ def grad_phi_Ndim(j, *x):
     
     return np.array(solution)
 
-x = np.linspace(0, 1, 100)
+def grad_phi_2d(i, x):
+    return np.array([grad_phi(i[0], x[0]) * phi(i[1], x[1]), phi(i[0], x[0]) * grad_phi(i[1], x[1])])
+
+x = np.linspace(0, 1, 200)
 plt.plot(x, grad_phi(.5, x))
-plt.plot(x, phi(.5, x))
+plt.plot(x, phi(.5, x) + 4*phi(.6, x))
 plt.show()
 
 """temp = grad_phi_Ndim((.5, .3), domain)
