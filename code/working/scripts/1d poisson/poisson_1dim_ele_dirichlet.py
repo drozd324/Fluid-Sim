@@ -1,0 +1,99 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+import os
+import sys
+current_dir = os.getcwd()
+top_dir = os.path.abspath(os.path.join(current_dir, "..", ".."))
+sys.path.append(top_dir)
+
+from tools import basis_functions as bf
+
+N = 200
+
+def solve_poisson(H):   
+    """Container function for main part of code. The purpose of this is to create an easy way to 
+    run solver with various parameters.
+
+    Args:
+        H (int): number of nodes
+
+    Returns:
+        _type_: _description_
+    """ 
+    
+    vertices = list(np.linspace(0, 1, H))
+    elements = [[vertices[i], vertices[i+1]] for i in range(H-1)]
+    h = vertices[1] - vertices[0]
+
+    num_step = 10000 # number of steps in calculation of integrals
+
+    def force(x):
+        return -1
+
+    A = np.zeros((H, H))
+    F = np.zeros((H))
+
+
+    def basis_func(vert, x):
+        #return bf.psi(vert, x, h)
+        return bf.phi(vert, x, h)
+
+    def d_basis_func(vert, x):
+        return bf.grad_phi(vert, x, h)
+        #return np.gradient(basis_func(vert, x), h)
+    
+    def a(vert0, vert1, x):
+        return d_basis_func(vert0, x) * d_basis_func(vert1, x)
+
+    def f(vert0, x):
+        return basis_func(vert0, x) * force(x)
+
+    # main bit of code iterating over elements of mesh (here a 1dim line) and calcualting entries of the matrices
+    for ele in elements:
+        x = np.linspace(ele[0], ele[1], num_step)
+        
+        for vert0 in ele:
+            j = vertices.index(vert0)
+            F[j] = F[j] + np.trapz(f(vert0, x), x)
+            
+            for vert1 in ele:
+                i = vertices.index(vert1)
+                A[i, j] = A[i, j] + np.trapz(a(vert0, vert1, x), x)
+
+    # final calculation of solution
+    A_inverted = np.linalg.pinv(A)
+    solution = np.matmul(A_inverted, F)
+    
+    x = np.linspace(0, 1, N)
+    u = bf.conv_sol(solution, x, bf.hat, vertices, h)
+    
+    return u, A, F
+
+
+poisson_sols = []
+vert_num = [3, 5, 20]
+for num in vert_num:
+    sol = solve_poisson(num)
+    poisson_sols.append(sol)
+
+x = np.linspace(0, 1, N)
+plt.plot(x, ((x**2)/2) - (x/2), label="Analytical Solution")
+for i, u in enumerate(poisson_sols):
+    plt.plot(x, u[0], label=f"{vert_num[i]} vertices")
+plt.xlabel("x")
+plt.ylabel("u(x)")
+plt.legend()
+plt.title(r'Solution for $u^{\prime\prime}(x) = -1$')
+plt.savefig(f"(Poisson_1d)_(lin_sol)")
+
+#plt.matshow(A)
+#plt.title(r'Solution Matrix for $u^{\prime\prime}(x) = -1$')
+#plt.colorbar()
+#plt.savefig(f"(Poisson_1d)_(lin_matrix_A)_(vertex_num_{H})")
+
+#F = [[F[i], 0] for i in range(H)]
+#plt.matshow(F)
+#plt.colorbar()
+
+plt.show()  
