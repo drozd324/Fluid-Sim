@@ -34,11 +34,10 @@ def solve_poisson(H):
     num_step = 10000 # number of steps in calculation of integrals
 
     def force(x):
-        return -1
+        return -x
 
     A = np.zeros((H, H))
     F = np.zeros((H))
-
 
     def basis_func(vert, x):
         #return bf.psi(vert, x, h)
@@ -77,25 +76,25 @@ def solve_poisson(H):
 
 
 poisson_sols = []
-vert_num = [3, 5, 20]
+vert_num = [50]#[3, 5, 20]
 for num in vert_num:
     sol = solve_poisson(num)
     poisson_sols.append(sol)
 
 x = np.linspace(0, 1, N)
-plt.plot(x, ((x**2)/2) - (x/2), label="Analytical Solution")
+#plt.plot(x, ((x**2)/2) - (x/2), label="Analytical Solution")
 for i, u in enumerate(poisson_sols):
     plt.plot(x, u[0], label=f"{vert_num[i]} vertices")
 plt.xlabel("x")
 plt.ylabel("u(x)")
-plt.legend()
-plt.title(r'Solution for $u^{\prime\prime}(x) = -1$')
-plt.savefig(f"(Poisson_1d)_(lin_sol)")
+#plt.legend()
+plt.title(r'Solution for $-u^{\prime\prime}(x) = x$')
+plt.savefig(f"(Poisson_1d)_(lin_sol)_(x)", dpi=500)
 plt.show()  
 
 for i in range(len(vert_num)):
     plt.matshow(poisson_sols[i][1])
-    plt.title(r'Solution Matrix for $u^{\prime\prime}(x) = -1$' + f"   ,vert num = {vert_num[i]}")
+    plt.title(r'Solution Matrix for $-u^{\prime\prime}(x) = 1$' + f"   ,vert num = {vert_num[i]}")
     plt.colorbar()
     plt.show()
     #plt.savefig(f"(Poisson_1d)_(lin_matrix_A)_(vertex_num_{H})")

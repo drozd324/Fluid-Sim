@@ -12,7 +12,7 @@ from tools import basis_functions as bf
 from tools import vector_products as vp
 
 nu = 1
-steps = 100 # accuracy or steps in integrals
+steps = 200 # accuracy or steps in integrals
 
 # defining mesh
 H = 3 + (2*3)
@@ -35,19 +35,21 @@ for i in list(np.arange(0, H-1, 2)):
         quad_elements.append(element)
 
 # manufacturing solutions to stokes equation
-u_1 = lambda x: (x[0]**2)*((1-x[0])**2)*x[1]*(1-x[1])*(1-(2*x[1]))
-u_2 = lambda x: -  (x[0])*(1-x[0])*(1-(2*x[1]))*(x[1]**2)*((1-x[1])**2)
-p = lambda x: np.sin(2*np.pi*x[0]) * np.sin(2*np.pi*x[1])
+
+u_1 = lambda x: 2*np.pi*(1 - np.cos(2*np.pi*x[0]))*np.sin(2*np.pi*x[1])
+u_2 = lambda x: -2*np.pi*(1 - np.cos(2*np.pi*x[1]))*np.sin(2*np.pi*x[0])
+
+p = lambda x: 10*np.sin(2*np.pi*x[0]) * np.sin(2*np.pi*x[1])
 
 # first derivatives
+dx_p = lambda x: np.gradient(p(x), h, edge_order=2)[1]
+dy_p = lambda x: np.gradient(p(x), h, edge_order=2)[0]
+
 dx_u1 = lambda x: np.gradient(u_1(x), h, edge_order=2)[1]
 dy_u1 = lambda x: np.gradient(u_1(x), h, edge_order=2)[0]
 
 dx_u2 = lambda x: np.gradient(u_2(x), h, edge_order=2)[1]
 dy_u2 = lambda x: np.gradient(u_2(x), h, edge_order=2)[0]
-
-dx_p = lambda x: np.gradient(p(x), h, edge_order=2)[1]
-dy_p = lambda x: np.gradient(p(x), h, edge_order=2)[0]
 
 # second derivatives
 ddx_u1 = lambda x: np.gradient(dx_u1(x), h, edge_order=2)[1]
@@ -56,31 +58,12 @@ ddy_u1 = lambda x: np.gradient(dy_u1(x), h, edge_order=2)[0]
 ddx_u2 = lambda x: np.gradient(dx_u2(x), h, edge_order=2)[1]
 ddy_u2 = lambda x: np.gradient(dy_u2(x), h, edge_order=2)[0]
 
-"""u_1 = lambda x: (x[0]**2)*((1-x[0])**2)*x[1]*(1-x[1])*(1-(2*x[1]))
-u_2 = lambda x: -(x[0])*(1-x[0])*(1-(2*x[1]))*(x[1]**2)*((1-x[1])**2)
-
-dx_u1 = lambda x: 2*x[0]*(1-x[0])*(1 - (2*x[0]))*x[1]*(1-x[1])*(1 - (2*x[1]))
-dy_u2 = lambda x: - dx_u1(x)
-
-ddx_u1 = lambda x: 2*y[1]*(1-x[1])*(1-(2*x[1]))*( ((1-x[0])*1-(2*x[0])) - (x[0]*(1-(2*x[0])) - (2*x[0]*(1-x[0])) ))
-ddy_u1 = lambda x: (x[0]**2) * ((1 - x[0])**2) * ( - (2*(1 - (2*x[1]))) - (4*(1 - x[1])) + (4*x[1]) )
-
-ddx_u2 = lambda x: (x[1]**2) * ((1 - x[1])**2) * ( (2*(1 - (2*x[0]))) + (4*(1 - x[0])) - (4*x[0]) )
-ddy_u2 = lambda x: - 2*y[0]*(1-x[0])*(1-(2*x[0]))*( ((1-x[1])*1-(2*x[1])) - (x[1]*(1-(2*x[1])) - (2*x[1]*(1-x[1])) ))
-
-dx_p = lambda x: 2*np.pi*np.cos(2*np.pi*x[0]) * np.sin(2*np.pi*x[1])
-dy_p = lambda x: 2*np.pi*np.sin(2*np.pi*x[0]) * np.cos(2*np.pi*x[1])
-"""
-#ddx_u1 = lambda x: 2 + x[0]
-#ddy_u1 = lambda x: 0*x[0]
-#dx_p = lambda x: 2*np.pi*np.cos(2*np.pi*x[0])
-
-# declaring appropirate forcing functions
-f_1 = lambda x: (nu*(ddx_u1(x) + ddy_u1(x)))# - dx_p(x)
-f_2 = lambda x: (nu*(ddx_u2(x) + ddy_u2(x)))# - dy_p(x)
+# declaring appropriate forcing functions
+f_1 = lambda x: (nu*(ddx_u1(x) + ddy_u1(x))) - dx_p(x)
+f_2 = lambda x: (nu*(ddx_u2(x) + ddy_u2(x))) - dy_p(x)
 
 # declaring appropriate funtions for block matrices
-gdg        = lambda vert0, vert1, x, h: nu * vp.grad_dot_grad(bf.psi_2d(vert0, x, h), bf.psi_2d(vert1, x, h) , h)
+gdg        = lambda vert0, vert1, x, h:  nu * vp.grad_dot_grad(bf.psi_2d(vert0, x, h), bf.psi_2d(vert1, x, h) , h)
 hat_dx_psi = lambda vert0, vert1, x, h:  bf.phi_2d(vert0, x, h) * (np.gradient(bf.psi_2d(vert1, x, h), h)[1])
 hat_dy_psi = lambda vert0, vert1, x, h:  bf.phi_2d(vert0, x, h) * (np.gradient(bf.psi_2d(vert1, x, h), h)[0])
 
@@ -150,9 +133,8 @@ F = np.block(reshaped_vect_blocks)
 
 solution = np.matmul(np.linalg.pinv(A), F)
 
-
 # creating mesh with higher resolution for ploting
-N = H
+N = 4*H
 x = np.linspace(0, 1, N)
 y = np.linspace(0, 1, N)
 X, Y = np.meshgrid(x, y)
@@ -163,13 +145,14 @@ u_2 = bf.conv_sol(solution[H**2     : 2*(H**2)], (X, Y), bf.psi_2d, vertices, h)
 p   = bf.conv_sol(solution[2*(H**2) :         ], (X, Y), bf.hat_2d, vertices, h)
 
 # saving data just in case
-import torch
+"""import torch
 data = {"A"  : A,
         "F"  : F,
         "u_1": u_1,
         "u_2": u_2,
         "p"  : p   }
 torch.save(data, f"stokes{H}.pt")
+"""
 
 # plotting 
 plt.matshow(A)
@@ -217,6 +200,5 @@ ax.set_zlabel("P(x, y)")
 ax.set_title("Pressure")
 ax.plot_surface(X, Y, p, cmap="viridis")
 plt.savefig("pressure", dpi=500)
-
 
 plt.show()

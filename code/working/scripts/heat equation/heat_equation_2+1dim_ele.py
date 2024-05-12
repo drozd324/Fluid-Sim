@@ -31,6 +31,7 @@ dt = .01 # change in time
 time_steps = 50 # amount of iterations we want
 u_0 = [np.sin(np.pi*x[0]) * np.sin(np.pi*x[1]) for x in vertices] # inital condtions at time=0
 u_sols = [u_0] # list for keeping track of evolution of system
+A_sols = [] 
 
 def force(x):
     return 0
@@ -70,6 +71,7 @@ for t in range(time_steps): #time stepping loop
                 
     solution_t = np.matmul(np.linalg.pinv(A), F)
     u_sols.append(solution_t)
+    A_sols.append(A)
     
     
 t1 = time.time()
@@ -79,8 +81,7 @@ func_u_sols = []
 for i in range(len(u_sols)):
     func_u_sols.append(np.array(u_sols[i]).reshape(H, H))
 
-#import torch
-#torch.save(func_u_sols, "heat_equation_ele.pt")
+"""--------------- PLOTTING --------------------"""
 
 # plot and animation
 len_u_sols = len(func_u_sols)
@@ -103,6 +104,12 @@ ax.set_title(r"$ \frac{\partial u}{\partial t} = \nabla^2 u $ with $u(x,y,0) = s
 ani = animation.FuncAnimation(fig, change_plot, frn, fargs=(func_u_sols, plot), interval=1000 / fps)
 plt.show()
 
+# plot of matrix for first iteration
+plt.matshow(A_sols[0])
+plt.title("Matrix for first iteration")
+plt.colorbar()
+plt.show()
+
 # creating a sequence of images
 plt.clf()
 iter1 = 0
@@ -110,7 +117,7 @@ fig = plt.figure()
 ax = plt.axes(projection ='3d')
 ax.axes.set_zlim3d(bottom=0, top=1) 
 ax.plot_surface(X, Y, func_u_sols[iter1], cmap="plasma", vmin=0, vmax=1)
-plt.savefig(f"heat_equ_iter{iter1}", dpi=400)
+#plt.savefig(f"heat_equ_iter{iter1}", dpi=400)
 
 plt.clf()
 iter2 = int(len_u_sols/12)
@@ -118,7 +125,7 @@ fig = plt.figure()
 ax = plt.axes(projection ='3d')
 ax.axes.set_zlim3d(bottom=0, top=1) 
 ax.plot_surface(X, Y, func_u_sols[iter2], cmap="plasma", vmin=0, vmax=1)
-plt.savefig(f"heat_equ_iter{iter2}", dpi=400)
+#plt.savefig(f"heat_equ_iter{iter2}", dpi=400)
 
 plt.clf()
 iter3 = int(len_u_sols/6)
@@ -126,7 +133,7 @@ fig = plt.figure()
 ax = plt.axes(projection ='3d')
 ax.axes.set_zlim3d(bottom=0, top=1) 
 ax.plot_surface(X, Y, func_u_sols[iter3], cmap="plasma", vmin=0, vmax=1)
-plt.savefig(f"heat_equ_iter{iter3}", dpi=400)
+#plt.savefig(f"heat_equ_iter{iter3}", dpi=400)
 
 plt.clf()
 iter4 = -1
@@ -134,4 +141,5 @@ fig = plt.figure()
 ax = plt.axes(projection ='3d')
 ax.axes.set_zlim3d(bottom=0, top=1) 
 ax.plot_surface(X, Y, func_u_sols[iter4], cmap="plasma", vmin=0, vmax=1)
-plt.savefig(f"heat_equ_iter{iter4}", dpi=400)
+#plt.savefig(f"heat_equ_iter{iter4}", dpi=400)
+

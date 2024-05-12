@@ -77,7 +77,7 @@ print(f"time taken: {(t1-t0)/60} minutes")
 solution = np.matmul(np.linalg.pinv(A), F)
 
 # the rest is plotting
-N = H
+N = 3*H
 x0 = np.linspace(0, 1, N)
 y0 = np.linspace(0, 1, N)
 X0, Y0 = np.meshgrid(x0, y0)
@@ -88,10 +88,10 @@ ax.plot_surface(X0, Y0, bf.conv_sol(solution, (X0, Y0), bf.hat_2d, vertices, h),
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_zlabel('u(x,y)')
-ax.set_title(r"$ \nabla^2u(x,y) = 2y $ with neumann bdry $n(x,y) = x(x-1)$")
-plt.savefig(f"(Poisson_2d)_(neumann)_(vertex_num_{H**2})")
+#ax.set_title(r"$ \nabla^2u(x,y) = -2y $ with neumann bdry $n(x,y) = -x(x-1)$")
+plt.savefig(f"(Poisson_2d)_(neumann)_(vertex_num_{H**2})", dpi=500)
 
 plt.matshow(A)
 plt.colorbar()
-plt.savefig(f"(Poisson_2d)_(mat)_(neumann)_(vertex_num_{H**2})")
+plt.savefig(f"(Poisson_2d)_(mat)_(neumann)_(vertex_num_{H**2})", dpi=500)
 plt.show()

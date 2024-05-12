@@ -70,13 +70,10 @@ tot = lambda x: dx_u1(x) + dy_u2(x)
 
 #ax.plot_surface(X, Y, p((X, Y)), cmap="viridis")
 #ax.plot_surface(X, Y, dx_p((X, Y)), cmap="viridis")
-#ax.plot_surface(X, Y, dx_u1((X, Y)) + dy_u2((X, Y)), cmap="viridis")
+ax.plot_surface(X, Y, dx_u1((X, Y)) + dy_u2((X, Y)), cmap="viridis")
 #ax.plot_surface(X, Y, dy_p, cmap="viridis")
 
 #plt.savefig("hat_basis_2d.png")
-
-
-
-ax.plot_surface(X, Y, -Y*X*(X-1), cmap="viridis")
+#ax.plot_surface(X, Y, -Y*X*(X-1), cmap="viridis")
 
 plt.show()
