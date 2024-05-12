@@ -13,7 +13,7 @@ from tools import basis_functions as bf
 
 steps = 10 # accuracy or steps in integrals
 epsilon = 1 # scaling for iteration
-precision = 1e-3 # criteria for stopping of iterator
+precision = 1e-2 # criteria for stopping of iterator
 
 # defining mesh
 H = 10
@@ -27,8 +27,8 @@ elements = [[[x[i]  , y[j]  ],
              [x[i+1], y[j+1]]] for i in range(H-1) for j in range(H-1)]
 X, Y = np.meshgrid(x, y)
 
-u = np.array([ 0 for x in vertices])
-#u = np.array([ np.sin(2*np.pi*x[0])*np.sin(2*np.pi*x[1]) for x in vertices])
+#u = np.array([ 0 for x in vertices])
+u = np.array([ np.sin(2*np.pi*x[0])*np.sin(2*np.pi*x[1]) for x in vertices])
 #u = torch.load("non_linear_ele_sols.pt")[-1].reshape(49)
 u_iter = [u]
 
@@ -115,18 +115,9 @@ for t in range(max_iterations):
     #print(F, np.sqrt(np.sum(np.square(F))))
 
     print(l_squ_norm(u_hat.reshape(H, H), x))
-    print(np.sum(u_hat))
     if l_squ_norm(u_hat.reshape(H, H), x) < precision:
         break
-        #run = False
-    #elif max_iterations == t:
-    #    run = False
         
-    #energy_i = energy((u_iter[t+1]).reshape(H, H), (X, Y))
-    #energy_terms.append(energy_i)
-    #torch.save(energy_terms, "non_linear_ele_energy.pt")
-    #print(energy_i)
-    
     #plt.matshow(J)
     #plt.colorbar()
     #plt.show()

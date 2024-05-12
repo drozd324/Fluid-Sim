@@ -28,13 +28,10 @@ def change_plot(frame_number, u_sols, plot):
 
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
-
-#ax.axis('equal')
-#ax.set_zlim(0, 1)
 plot = [ax.plot_surface(X, Y, u_sols[0])]
-#ax.set_xlabel("x")
-#ax.set_ylabel("y")
-#ax.set_zlabel("u(x, y)")
+ax.set_xlabel("x")
+ax.set_ylabel("y")
+ax.set_zlabel("u(x, y)")
 #ax.set_title(r"$ \frac{\partial u}{\partial t} = \nabla^2 u $ with $u(x,y,0) = sin(\pi x)sin(\pi y)$")
 #ax.axis('off')
 

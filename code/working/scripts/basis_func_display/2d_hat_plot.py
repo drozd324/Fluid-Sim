@@ -1,3 +1,7 @@
+"""
+Plotting of 2dim hat function, which becomes our basis function.
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -9,7 +13,7 @@ sys.path.append(top_dir)
 
 from tools import basis_functions as bf 
 
-N = 200
+N = 100
 x = np.linspace(0, 1, N)
 y = np.linspace(0, 1, N)
 X, Y = np.meshgrid(x, y)
@@ -17,5 +21,6 @@ X, Y = np.meshgrid(x, y)
 fig = plt.figure()
 ax = plt.axes(projection ='3d')
 
-ax.plot_surface(X, Y, bf.hat_2d((0.5, 0.5), (X, Y), .5), cmap="viridis")
+ax.plot_surface(X, Y, bf.hat_2d((0.5, 0.5), (X, Y), .5/2), cmap="viridis")
 plt.savefig("hat_basis_2d.png")
+plt.show()

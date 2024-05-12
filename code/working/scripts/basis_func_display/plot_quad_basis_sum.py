@@ -23,10 +23,11 @@ H = 3
 vertices = np.linspace(0, 1, H)
 h = vertices[1] - vertices[0]
 
+
 # these wont go into the for loop below because formatting a latex string is a pain in the ass
 plt.plot(x, bf.quad(0, x, h), label=r"$\psi_{0}(x)$", linestyle="--")
-plt.plot(x, bf.quad(.5, x, h), label=r"$\psi_{0.5}(x)$", linestyle="--")
-plt.plot(x, bf.quad(1, x, h), label=r"$\psi_{1}(x)$", linestyle="--")
+plt.plot(x, 3*bf.quad(.5, x, h), label=r"$\psi_{0.5}(x)$", linestyle="--")
+plt.plot(x, 2*bf.quad(1, x, h), label=r"$\psi_{1}(x)$", linestyle="--")
 
 u = 0
 for l, i in enumerate([0, .5, 1]):

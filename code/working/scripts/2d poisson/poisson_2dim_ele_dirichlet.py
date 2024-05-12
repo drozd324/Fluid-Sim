@@ -1,3 +1,8 @@
+"""
+Script solving the 2d poisson problem with dirichlet boudary conditions
+"""
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 import time 

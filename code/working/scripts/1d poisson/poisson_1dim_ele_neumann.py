@@ -1,3 +1,8 @@
+"""
+This script solves the 1 dimensional poisson probelem with neumann boudary conditions.
+"""
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -92,9 +97,5 @@ plt.title(r'Solution for $u^{\prime\prime}(x) = -1$')
 plt.matshow(poisson_sols[-1][1])
 plt.colorbar()
 #plt.savefig(f"(Poisson_1d)_(lin_matrix_A)_(vertex_num_{H})")
-
-#F = [[F[i], 0] for i in range(H)]
-#plt.matshow(F)
-#plt.colorbar()
 
 plt.show()  

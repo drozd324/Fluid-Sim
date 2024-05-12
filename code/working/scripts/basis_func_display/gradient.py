@@ -1,3 +1,7 @@
+"""
+Script testing how np.gradient function works
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 

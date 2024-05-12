@@ -12,21 +12,17 @@ from tools import basis_functions as bf
 from tools import vector_products as vp
 
 nu = 1
-steps = 1000 # accuracy or steps in integrals
+steps = 100 # accuracy or steps in integrals
 
 # defining mesh
-H = 3 + (2*5)
+H = 3 + (2*3)
 x = np.linspace(0, 1, H)
 y = np.linspace(0, 1, H)
 X, Y = np.meshgrid(x, y)
 h = x[1] - x[0]
 vertices = (np.array(np.meshgrid(x, y)).reshape(2, -1).T).tolist()
 
-lin_elements = [[[x[i]  , y[j] ],
-                [x[i+1], y[j]  ], 
-                [x[i]  , y[j+1]],
-                [x[i+1], y[j+1]]] for i in range(H-1) for j in range(H-1)]
-
+# defining quadratic elements
 quad_elements = []
 for i in list(np.arange(0, H-1, 2)):
     for j in list(np.arange(0, H-1, 2)):
@@ -40,7 +36,7 @@ for i in list(np.arange(0, H-1, 2)):
 
 # manufacturing solutions to stokes equation
 u_1 = lambda x: (x[0]**2)*((1-x[0])**2)*x[1]*(1-x[1])*(1-(2*x[1]))
-u_2 = lambda x: -   (x[0])*(1-x[0])*(1-(2*x[1]))*(x[1]**2)*((1-x[1])**2)
+u_2 = lambda x: -  (x[0])*(1-x[0])*(1-(2*x[1]))*(x[1]**2)*((1-x[1])**2)
 p = lambda x: np.sin(2*np.pi*x[0]) * np.sin(2*np.pi*x[1])
 
 # first derivatives
@@ -60,8 +56,7 @@ ddy_u1 = lambda x: np.gradient(dy_u1(x), h, edge_order=2)[0]
 ddx_u2 = lambda x: np.gradient(dx_u2(x), h, edge_order=2)[1]
 ddy_u2 = lambda x: np.gradient(dy_u2(x), h, edge_order=2)[0]
 
-"""
-u_1 = lambda x: (x[0]**2)*((1-x[0])**2)*x[1]*(1-x[1])*(1-(2*x[1]))
+"""u_1 = lambda x: (x[0]**2)*((1-x[0])**2)*x[1]*(1-x[1])*(1-(2*x[1]))
 u_2 = lambda x: -(x[0])*(1-x[0])*(1-(2*x[1]))*(x[1]**2)*((1-x[1])**2)
 
 dx_u1 = lambda x: 2*x[0]*(1-x[0])*(1 - (2*x[0]))*x[1]*(1-x[1])*(1 - (2*x[1]))
@@ -75,16 +70,14 @@ ddy_u2 = lambda x: - 2*y[0]*(1-x[0])*(1-(2*x[0]))*( ((1-x[1])*1-(2*x[1])) - (x[1
 
 dx_p = lambda x: 2*np.pi*np.cos(2*np.pi*x[0]) * np.sin(2*np.pi*x[1])
 dy_p = lambda x: 2*np.pi*np.sin(2*np.pi*x[0]) * np.cos(2*np.pi*x[1])
-
+"""
 #ddx_u1 = lambda x: 2 + x[0]
 #ddy_u1 = lambda x: 0*x[0]
 #dx_p = lambda x: 2*np.pi*np.cos(2*np.pi*x[0])
 
-"""
-
 # declaring appropirate forcing functions
-f_1 = lambda x: (nu*(ddx_u1(x) + ddy_u1(x))) - dx_p(x)
-f_2 = lambda x: (nu*(ddx_u2(x) + ddy_u2(x))) - dy_p(x)
+f_1 = lambda x: (nu*(ddx_u1(x) + ddy_u1(x)))# - dx_p(x)
+f_2 = lambda x: (nu*(ddx_u2(x) + ddy_u2(x)))# - dy_p(x)
 
 # declaring appropriate funtions for block matrices
 gdg        = lambda vert0, vert1, x, h: nu * vp.grad_dot_grad(bf.psi_2d(vert0, x, h), bf.psi_2d(vert1, x, h) , h)
@@ -94,7 +87,6 @@ hat_dy_psi = lambda vert0, vert1, x, h:  bf.phi_2d(vert0, x, h) * (np.gradient(b
 #gdg        = lambda vert0, vert1, x, h: nu * vp.grad_dot_grad_psi2d(vert0, vert1, x, h)
 #hat_dx_psi = lambda vert0, vert1, x, h: bf.phi_2d(vert0, x, h) * bf.dx_psi_2d(vert1, x, h)
 #hat_dy_psi = lambda vert0, vert1, x, h: bf.phi_2d(vert0, x, h) * bf.dy_psi_2d(vert1, x, h)
-
 
 t0 = time.time()
 
@@ -160,7 +152,7 @@ solution = np.matmul(np.linalg.pinv(A), F)
 
 
 # creating mesh with higher resolution for ploting
-N = 40
+N = H
 x = np.linspace(0, 1, N)
 y = np.linspace(0, 1, N)
 X, Y = np.meshgrid(x, y)

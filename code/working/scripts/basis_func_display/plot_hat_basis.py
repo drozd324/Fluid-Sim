@@ -1,3 +1,7 @@
+"""
+Plotting of hat basis functino and its derivative
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -18,7 +22,7 @@ do NOT USE += ON NUMPY ARRAYS
 
 N = 200
 x = np.linspace(0, 1, N)
-h = .2
+h = .1
         
 plt.plot(x, bf.hat(.5, x, h), label=r"$\phi_{0.5}(x)$")
 plt.plot(x, bf.grad_hat(.5, x, h), label=r"$\phi_{0.5}^\prime(x)$", linestyle="--")

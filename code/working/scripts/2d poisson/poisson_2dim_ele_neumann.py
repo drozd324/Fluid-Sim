@@ -11,11 +11,10 @@ sys.path.append(top_dir)
 from tools import basis_functions as bf
 from tools import vector_products as vp
 
-pi = np.pi + 1
 steps = 200 # accuracy or steps in integrals
  
 # defining mesh
-H = 9
+H = 7
 x = np.linspace(0, 1, H)
 y = np.linspace(0, 1, H)
 h = x[1] - x[0]
@@ -33,19 +32,19 @@ def force(x):
     x, y = x
     #return ((((pi)**2)*(y**2)) - 2)*(np.sin(np.pi*x)) #-6#-2*(np.pi**2)*np.sin(np.pi*x[0])*np.sin(np.pi*x[1])
     #return ((np.pi)**2)*y*np.sin(np.pi*x)
-    return 2*y
+    return -2*y
 
 def n(x):
     x, y = x
     #return y*((pi*np.cos(pi*x)) - (2*np.sin(pi*x))) # + np.sin(np.pi*x)#-2*y
     #return - ((np.pi*y*np.cos(np.pi*x)) + np.sin(np.pi*x))zs
-    return  x*(x-1) #((y*(2*x-1)) 
+    return  -x*(x-1)# + (y*((2*x)-1)) 
     
 def f(vert, x):
-    return bf.phi_and_hat_2d(vert, x, h, []) * force(x)
+    return bf.phi_and_hat_2d(vert, x, h, [0]) * force(x)
 
 def a(vert0, vert1, x):
-    return vp.gdg_phi_and_hat_2d(vert0, vert1, x, h, [])
+    return vp.gdg_phi_and_hat_2d(vert0, vert1, x, h, [0])
 
 def neumann(vert, x):
     x, y = x
@@ -64,7 +63,7 @@ for k, ele in enumerate(elements):
     
     for vert0 in ele:
         j = vertices.index(vert0)
-        F[j] = F[j] + np.trapz(np.trapz( f(vert0, (X0, Y0)) , y0, axis=0), x0, axis=0) - neumann(vert0, (x0, y0))
+        F[j] = F[j] - np.trapz(np.trapz( f(vert0, (X0, Y0)) , y0, axis=0), x0, axis=0) + neumann(vert0, (x0, y0))
         
         for vert1 in ele:
             i = vertices.index(vert1)

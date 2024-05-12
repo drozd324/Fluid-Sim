@@ -1,3 +1,7 @@
+"""
+General test script for plotting vector fields and 2d functions
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 

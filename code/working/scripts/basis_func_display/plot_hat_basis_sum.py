@@ -1,3 +1,7 @@
+"""
+Plotting of sum of hat basis fuctions to show linear interpolation between their peaks
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -26,19 +30,14 @@ h = vertices[1] - vertices[0]
 func1 = 1 * bf.phi(.25, x, h)
 func2 = 3 * bf.phi(.5, x, h)
 func3 = 2 * bf.phi(.75, x, h)
-
-# these wont go into a for loop below because formatting a latex string is a pain in the ass
-plt.plot(x, func1, label=r"$\phi_{0.25}(x)$", linestyle="--")
-plt.plot(x, func2, label=r"$\phi_{0.5}(x)$" , linestyle="-.")
-plt.plot(x, func3, label=r"$\phi_{0.75}(x)$", linestyle=":")
-plt.xlabel("x")
-plt.legend()
-plt.savefig("linear_basis")
-plt.show()
-
 func_sum = func1 + func2 + func3
+
 plt.plot(x, func_sum, label="sum of bases", linestyle="-")
+plt.plot(x, func1, label=r"$1\phi_{0.25}(x)$", linestyle="--")
+plt.plot(x, func2, label=r"$3\phi_{0.5}(x)$" , linestyle="-.")
+plt.plot(x, func3, label=r"$2\phi_{0.75}(x)$", linestyle=":")
+
 plt.xlabel("x")
 plt.legend()
-plt.savefig("linear_basis_sum")
+#plt.savefig("linear_basis_sum")
 plt.show()

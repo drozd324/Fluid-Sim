@@ -1,3 +1,8 @@
+"""
+This script solves the 1 dimensional poisson probelem with dirchlet boudary conditions. Section 3 in report
+"""
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -86,14 +91,11 @@ plt.ylabel("u(x)")
 plt.legend()
 plt.title(r'Solution for $u^{\prime\prime}(x) = -1$')
 plt.savefig(f"(Poisson_1d)_(lin_sol)")
-
-#plt.matshow(A)
-#plt.title(r'Solution Matrix for $u^{\prime\prime}(x) = -1$')
-#plt.colorbar()
-#plt.savefig(f"(Poisson_1d)_(lin_matrix_A)_(vertex_num_{H})")
-
-#F = [[F[i], 0] for i in range(H)]
-#plt.matshow(F)
-#plt.colorbar()
-
 plt.show()  
+
+for i in range(len(vert_num)):
+    plt.matshow(poisson_sols[i][1])
+    plt.title(r'Solution Matrix for $u^{\prime\prime}(x) = -1$' + f"   ,vert num = {vert_num[i]}")
+    plt.colorbar()
+    plt.show()
+    #plt.savefig(f"(Poisson_1d)_(lin_matrix_A)_(vertex_num_{H})")

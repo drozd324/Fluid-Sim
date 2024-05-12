@@ -35,7 +35,7 @@ u_sols = [u_0] # list for keeping track of evolution of system
 def force(x):
     return 0
 
-# functions to calculate entries of matrices
+# functions for calculation the entries of matrices
 def f(vert, x, u):
     return (u + (dt * force(x))) * bf.phi_2d(vert, x, h)
 
@@ -100,5 +100,38 @@ ax.set_ylabel("y")
 ax.set_zlabel("u(x, y, t)")
 ax.set_title(r"$ \frac{\partial u}{\partial t} = \nabla^2 u $ with $u(x,y,0) = sin(\pi x)sin(\pi y)$")
 
-#ani = animation.FuncAnimation(fig, change_plot, frn, fargs=(func_u_sols, plot), interval=1000 / fps)
+ani = animation.FuncAnimation(fig, change_plot, frn, fargs=(func_u_sols, plot), interval=1000 / fps)
 plt.show()
+
+# creating a sequence of images
+plt.clf()
+iter1 = 0
+fig = plt.figure()
+ax = plt.axes(projection ='3d')
+ax.axes.set_zlim3d(bottom=0, top=1) 
+ax.plot_surface(X, Y, func_u_sols[iter1], cmap="plasma", vmin=0, vmax=1)
+plt.savefig(f"heat_equ_iter{iter1}", dpi=400)
+
+plt.clf()
+iter2 = int(len_u_sols/12)
+fig = plt.figure()
+ax = plt.axes(projection ='3d')
+ax.axes.set_zlim3d(bottom=0, top=1) 
+ax.plot_surface(X, Y, func_u_sols[iter2], cmap="plasma", vmin=0, vmax=1)
+plt.savefig(f"heat_equ_iter{iter2}", dpi=400)
+
+plt.clf()
+iter3 = int(len_u_sols/6)
+fig = plt.figure()
+ax = plt.axes(projection ='3d')
+ax.axes.set_zlim3d(bottom=0, top=1) 
+ax.plot_surface(X, Y, func_u_sols[iter3], cmap="plasma", vmin=0, vmax=1)
+plt.savefig(f"heat_equ_iter{iter3}", dpi=400)
+
+plt.clf()
+iter4 = -1
+fig = plt.figure()
+ax = plt.axes(projection ='3d')
+ax.axes.set_zlim3d(bottom=0, top=1) 
+ax.plot_surface(X, Y, func_u_sols[iter4], cmap="plasma", vmin=0, vmax=1)
+plt.savefig(f"heat_equ_iter{iter4}", dpi=400)
