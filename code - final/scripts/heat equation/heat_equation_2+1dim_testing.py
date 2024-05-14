@@ -28,6 +28,7 @@ sys.path.append(top_dir)
 
 from tools import basis_functions as bf
 from tools import vector_products as vp
+from tools import norms as nrm
 
 steps = 100 # accuracy or steps in integrals
 
@@ -94,9 +95,15 @@ for t in range(time_steps): #time stepping loop
 t1 = time.time()
 print(f"time taken: {(t1-t0)/60} minutes")
 
+# creating mesh with higher resolution for ploting
+N = 4*H
+x = np.linspace(0, 1, N)
+y = np.linspace(0, 1, N)
+X, Y = np.meshgrid(x, y)
+
 func_u_sols = []
 for i in range(len(u_sols)):
-    func_u_sols.append(np.array(u_sols[i]).reshape(H, H))
+    func_u_sols.append(bf.conv_sol(u_sols[i], (X, Y), bf.phi_2d, vertices, h))
 
 """--------------- PLOTTING --------------------"""
 
@@ -119,7 +126,7 @@ ax.set_zlabel("u(x, y, t)")
 ax.set_title(r"$ \frac{\partial u}{\partial t} - \nabla^2 u = (2 \pi ^2 t + 1)sin(\pi x)sin(\pi y)$ with $u(x,y,0) = 0$")
 
 ani = animation.FuncAnimation(fig, change_plot, frn, fargs=(func_u_sols, plot), interval=1000 / fps)
-ani.save('animation.gif',writer='PillowWriter',fps=fps, dpi=400)
+#ani.save('animation.gif',writer='PillowWriter',fps=fps, dpi=400)
 plt.show()
 
 # plot of matrix for first iteration
@@ -173,3 +180,7 @@ ax.set_ylabel('y')
 ax.set_zlabel(f'$u(x, y, {iter4*dt})$')
 #plt.savefig(f"heat_equ_iter{iter4}", dpi=400)
 
+#error check at t=0 
+math_sol = lambda x, t: t*np.sin(np.pi *x[0])*np.sin(np.pi *x[1])
+error = nrm.l_squ_norm_2d(func_u_sols[0] - math_sol((x, y), 0))
+print(f"error = {error}")

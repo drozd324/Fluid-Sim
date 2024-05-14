@@ -1,3 +1,22 @@
+"""
+Script solving the 2d poisson problem with neumann boudary conditions. 
+
+With manfactured forcing function 
+
+--------- in LateX code-----------
+
+$f(x, y) = -2y
+
+neumann boundary conditions
+
+$\del u \cdotp \hat{n} = -x(x-1)$
+
+and solution
+
+$u(x, y) = -yx(x - 1)
+
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
 import time 
@@ -29,15 +48,11 @@ F = np.zeros((H**2))
 
 def force(x):
     x, y = x
-    #return ((((pi)**2)*(y**2)) - 2)*(np.sin(np.pi*x)) #-6#-2*(np.pi**2)*np.sin(np.pi*x[0])*np.sin(np.pi*x[1])
-    #return ((np.pi)**2)*y*np.sin(np.pi*x)
     return -2*y
 
 def n(x):
     x, y = x
-    #return y*((pi*np.cos(pi*x)) - (2*np.sin(pi*x))) # + np.sin(np.pi*x)#-2*y
-    #return - ((np.pi*y*np.cos(np.pi*x)) + np.sin(np.pi*x))zs
-    return  -x*(x-1)# + (y*((2*x)-1)) 
+    return  -x*(x-1)
     
 def f(vert, x):
     return bf.phi_and_hat_2d(vert, x, h, [0]) * force(x)
@@ -88,7 +103,7 @@ ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_zlabel('u(x,y)')
 #ax.set_title(r"$ \nabla^2u(x,y) = -2y $ with neumann bdry $n(x,y) = -x(x-1)$")
-plt.savefig(f"(Poisson_2d)_(neumann)_(vertex_num_{H**2})", dpi=500)
+#plt.savefig(f"(Poisson_2d)_(neumann)_(vertex_num_{H**2})", dpi=500)
 
 plt.matshow(A)
 plt.colorbar()

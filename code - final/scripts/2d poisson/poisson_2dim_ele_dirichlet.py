@@ -1,5 +1,16 @@
 """
-Script solving the 2d poisson problem with dirichlet boudary conditions
+Script solving the 2d poisson problem with dirichlet boudary conditions. 
+
+With manfactured forcing function 
+
+--------- in LateX code-----------
+
+$f(x, y) = -2 \pi^2 sin(\pi x)sin(\pi y)$
+
+and solution
+
+$u(x, y) = -sin(\pi x)sin(\pi y)
+
 """
 
 import numpy as np
@@ -14,6 +25,7 @@ sys.path.append(top_dir)
 
 from tools import basis_functions as bf
 from tools import vector_products as vp
+from tools import norms as nrm
 
 steps = 200 # accuracy or steps in integrals
  
@@ -78,9 +90,14 @@ ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_zlabel('u(x,y)')
 ax.set_title(r"$ \nabla^2 u(x,y) = -2 \pi^2sin(\pi x)sin(\pi y) $")
-plt.savefig(f"(Poisson_2d)_(vertex_num_{H**2})", dpi=500)
+#plt.savefig(f"(Poisson_2d)_(vertex_num_{H**2})", dpi=500)
 
 plt.matshow(A)
 plt.colorbar()
-plt.savefig(f"(Poisson_2d)_(mat_A)_(vertex_num_{H**2})", dpi=500)
+#plt.savefig(f"(Poisson_2d)_(mat_A)_(vertex_num_{H**2})", dpi=500)
 plt.show()
+
+#error check
+math_sol = lambda x: -np.sin(np.pi*x[0])*np.sin(np.pi*x[1])
+ele_sol = bf.conv_sol(solution, (X0, Y0), bf.phi_2d, vertices, h)
+print(f"L squared norm error = {nrm.l_squ_norm_2d(ele_sol - math_sol((X0, Y0)), (x0, y0))}")

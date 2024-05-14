@@ -23,6 +23,7 @@ sys.path.append(top_dir)
 
 from tools import basis_functions as bf
 from tools import vector_products as vp
+from tools import norms as nrm
 
 steps = 500 # steps in integrals over each element
 
@@ -154,9 +155,9 @@ y = np.linspace(0, 1, N)
 X, Y = np.meshgrid(x, y)
 
 # dissasembling solution vector
-u_1 = bf.conv_sol(solution[       0 : H**2    ], (X, Y), bf.psi_2d, vertices, h)
-u_2 = bf.conv_sol(solution[H**2     : 2*(H**2)], (X, Y), bf.psi_2d, vertices, h)
-p   = bf.conv_sol(solution[2*(H**2) :         ], (X, Y), bf.hat_2d, vertices, h)
+u1_sol = bf.conv_sol(solution[       0 : H**2    ], (X, Y), bf.psi_2d, vertices, h)
+u2_sol = bf.conv_sol(solution[H**2     : 2*(H**2)], (X, Y), bf.psi_2d, vertices, h)
+p_sol  = bf.conv_sol(solution[2*(H**2) :         ], (X, Y), bf.hat_2d, vertices, h)
 
 # plotting 
 plt.matshow(A)
@@ -165,7 +166,7 @@ plt.title("Matrix")
 #plt.savefig("Vector_pde_matrix", dpi=500)
 
 fig, ax = plt.subplots()
-ax.quiver(X, Y, u_1, u_2)
+ax.quiver(X, Y, u1_sol, u2_sol)
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 ax.set_title(r"$\vec{u}(x, y)$")
@@ -175,34 +176,42 @@ fig, ax = plt.subplots()
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 ax.set_title(r"$\vec{u}(x, y)$")
-ax.streamplot(X, Y, u_1, u_2)
+ax.streamplot(X, Y, u1_sol, u2_sol)
 #plt.savefig("stream", dpi=500)
 
 fig = plt.figure()
 ax = plt.axes(projection ='3d')
 ax.set_xlabel("x")
 ax.set_ylabel("y")
-ax.set_zlabel(r"$u_x(x, y)$")
+ax.set_zlabel(r"$u_1(x, y)$")
 ax.set_title("Horizontal Velocity")
-ax.plot_surface(X, Y, u_1, cmap="viridis")
+ax.plot_surface(X, Y, u1_sol, cmap="viridis")
 #plt.savefig("horizontal velocity", dpi=500)
 
 fig = plt.figure()
 ax = plt.axes(projection ='3d')
 ax.set_xlabel("x")
 ax.set_ylabel("y")
-ax.set_zlabel(r"$u_y(x, y)$")
+ax.set_zlabel(r"$u_2(x, y)$")
 ax.set_title("Vertical Velocity")
-ax.plot_surface(X, Y, u_2, cmap="viridis")
+ax.plot_surface(X, Y, u2_sol, cmap="viridis")
 #plt.savefig("vertical velocity", dpi=500)
 
 fig = plt.figure()
 ax = plt.axes(projection ='3d')
 ax.set_xlabel("x")
 ax.set_ylabel("y")
-ax.set_zlabel("P(x, y)")
+ax.set_zlabel("p(x, y)")
 ax.set_title("Pressure")
-ax.plot_surface(X, Y, p, cmap="viridis")
+ax.plot_surface(X, Y, p_sol, cmap="viridis")
 #plt.savefig("pressure", dpi=500)
 
 plt.show()
+
+#error check
+error_u1_sol = nrm.l_squ_norm_2d(u_1((X, Y)) - u1_sol, (x, y))
+error_u2_sol = nrm.l_squ_norm_2d(u_2((X, Y)) - u2_sol, (x, y))
+error_p_sol  = nrm.l_squ_norm_2d(p((X, Y))   - p_sol , (x, y))
+
+error_sum = error_u1_sol + error_u2_sol + error_p_sol
+print(f"error = {error_sum}")

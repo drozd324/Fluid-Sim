@@ -25,7 +25,7 @@ def solve_poisson(H):
         H (int): number of nodes
 
     Returns:
-        tuple: solution to equation, solution matrix A, solution matrix F
+        tuple: solution to equation, solution matrix A, solution matrix F, error
     """ 
     
     vertices = list(np.linspace(0, 1, H))
@@ -69,12 +69,14 @@ def solve_poisson(H):
     A_inverted = np.linalg.pinv(A)
     solution = np.matmul(A_inverted, F)
     
+    vertices = np.array(vertices)
+    error = nrm.l_squ_norm((((vertices**2)/2) - (vertices/2)) - solution, vertices)
+    
     x = np.linspace(0, 1, N)
     u = bf.conv_sol(solution, x, bf.hat, vertices, h)
     
-    return u, A, F
-
-
+    
+    return u, A, F, error
 
 poisson_sols = []
 vert_num = [3, 5, 20] # number of vertices to solve the equation over
@@ -104,5 +106,4 @@ for i in range(len(vert_num)):
 There is an $L^2$ norm which is used to comapare functions. We would simply take the difference 
 of our solution and its analytical solution and throw it into this norm.
 """
-
-print()
+print(f"L squared norm error for 20 vertices = {poisson_sols[2][3]}")
