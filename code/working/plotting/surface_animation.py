@@ -31,6 +31,6 @@ ax.set_zlim(-1, 0)
 ani = animation.FuncAnimation(fig, change_plot, frn, fargs=(u_sols, plot), interval=1000/fps)
 
 fn = 'plot'
-ani.save(fn+'.gif',writer='PillowWriter',fps=fps, dpi=300)
+ani.save(fn+'.gif',writer='PillowWriter',fps=fps, dpi=400)
 
 plt.show()
