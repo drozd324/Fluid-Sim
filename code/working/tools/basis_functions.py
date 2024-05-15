@@ -209,9 +209,31 @@ def psi_2d(i, x, h):
     return psi(i[0], x[0], h) * psi(i[1], x[1], h)
 
 def dx_psi_2d(i, x, h):
+    """the derivative with respect to x of a 2d quadratic basis function
+
+    Args:
+        i (float): peak of function
+        x (float): variable
+        h (float): half the with of element
+
+    Returns:
+        float:
+    """
+    
     return grad_psi(i[0], x[0], h) * psi(i[1], x[1], h)
 
 def dy_psi_2d(i, x, h):
+    """the derivative with respect to y of a 2d quadratic basis function
+
+    Args:
+        i (float): peak of function
+        x (float): variable
+        h (float): half the with of element
+
+    Returns:
+        float:
+    """
+    
     return psi(i[0], x[0], h) * grad_psi(i[1], x[1], h)
 
 

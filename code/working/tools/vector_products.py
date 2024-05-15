@@ -9,6 +9,9 @@ sys.path.append(top_dir)
 
 from tools import basis_functions as bf
 
+"""-------------------------------------- APPROXIMATE VECTOR PRODUCTS -------------------------------------------------"""
+# this section contains funcions which will predominatnly use the numpy gradient function to calculate derivatives
+
 def grad_dot_grad(func0, func1, h):
     """returns a dot product of gradients of two functions of two varibles.
     ie, grad(func0) dot grad(func1)
@@ -43,9 +46,12 @@ def func_mul_pdfunc(func0, func1, h, axis):
     return np.multiply(pd_f1, func0)    
 
 
+"""----------------------------------------- PRECISE VECTOR PRODUCTS ----------------------------------------------"""
+# this section contains precise evaluations of important vector products using pen and paper maths as much as possible
+
 def grad_dot_grad_phi2d(vert0, vert1, X, h):
     """returns a dot product of gradients of two bf.phi_2d functions.
-    mathematically; grad(phi2d) dot grad(phi2d)
+    mathematically --> grad(phi2d) dot grad(phi2d)
 
     Args:
         vert0 (_type_): _description_
@@ -70,6 +76,19 @@ def grad_dot_grad_phi2d(vert0, vert1, X, h):
     return dx_0*dx_1 + dy_0*dy_1
 
 def grad_dot_grad_psi2d(vert0, vert1, X, h):
+    """returns a dot product of gradients of two bf.psi_2d functions.
+    mathematically --> grad(psi2d) dot grad(psi2d)
+
+    Args:
+        vert0 (float): peak of associated basis function
+        vert1 (float): peak of associated basis function
+        X (numpy array): array to evaluate functions on
+        h (float): width between nodes
+
+    Returns:
+        numpy array:
+    """
+    
     x, y = X
     i, j = vert0
     a, b = vert1
@@ -82,7 +101,20 @@ def grad_dot_grad_psi2d(vert0, vert1, X, h):
     
     return dx_0*dx_1 + dy_0*dy_1
 
-def grad_dot_grad_hat2d(vert0, vert1, X, h, boundary=[0, 1]):
+def grad_dot_grad_hat2d(vert0, vert1, X, h):
+    """returns a dot product of gradients of two bf.hat_2d functions.
+    mathematically --> grad(psi2d) dot grad(psi2d)
+
+     Args:
+        vert0 (float): peak of associated basis function
+        vert1 (float): peak of associated basis function
+        X (numpy array): array to evaluate functions on
+        h (float): width between nodes
+
+    Returns:
+        numpy array:
+    """
+    
     x, y = X
     i, j = vert0
     a, b = vert1
@@ -96,6 +128,20 @@ def grad_dot_grad_hat2d(vert0, vert1, X, h, boundary=[0, 1]):
     return (dx_0*dx_1) + (dy_0*dy_1)
 
 def gdg_phi_and_hat_2d(vert0, vert1, X, h, hat_bdry=[]):
+    """returns a dot product of gradients of two bf.hat_2d functions.
+    mathematically --> grad(phi2d) dot grad(psi2d) 
+
+     Args:
+        vert0 (float): peak of associated basis function
+        vert1 (float): peak of associated basis function
+        X (numpy array): array to evaluate functions on
+        h (float): width between nodes
+        hat_bdry (list): location of boundary for hat functions
+
+    Returns:
+        numpy array:
+    """
+    
     x, y = X
     i, j = vert0
     a, b = vert1

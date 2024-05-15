@@ -1,12 +1,27 @@
 import numpy as np
 
-"""import os
-import sys
-current_dir = os.getcwd()
-top_dir = os.path.abspath(os.path.join(current_dir, ".."))
-sys.path.append(top_dir)
+def l_squ_norm(f, x0):
+    """The l squared norm for funcions of one variable, or here for 1 dimensional arrays.
 
-from tools import basis_functions as bf"""
+    Args:
+        f (numpy array): function give by numpy array
+        x0 (numpy array): array on which the function is defined on
 
-def l_squared_norm(f, X0, x0):
-    return np.sqrt( np.trapz(np.trapz( f(X0)**2 , x0[0], axis=0), x0[1], axis=0) )
+    Returns:
+        float: 
+    """
+    return np.trapz( np.abs(f(x0))**2 , x0, axis=0)
+
+def l_squ_norm_2d(f, X0, x0):
+    """The l squared norm for funcions of one variable, or here for 1 dimensional arrays.
+
+    Args:
+        f (numpy array): function give by numpy array
+        X0 (numpy array): 
+        x0 (numpy array): array on which the function is defined on
+
+    Returns:
+        float: 
+    """
+    
+    return np.sqrt( np.trapz(np.trapz( np.abs(f(X0))**2 , x0[0], axis=0), x0[1], axis=0) )
