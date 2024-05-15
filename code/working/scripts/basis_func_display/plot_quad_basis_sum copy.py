@@ -24,13 +24,13 @@ vertices = np.linspace(0, 1, H)
 h = vertices[1] - vertices[0]
 
 func1 = 1 * bf.quad(0, x, h)
-func2 = 3 * bf.quad(.5, x, h)
-func3 = 3 * bf.quad(1, x, h)
+func2 = 1 * bf.quad(.5, x, h)
+func3 = 1 * bf.quad(1, x, h)
 func_sum = func1 + func2 + func3
 
-plt.plot(x, func1, label=r"$ 1 \psi_{0}(x)$", linestyle="--")
-plt.plot(x, func2, label=r"$ 3 \psi_{0.5}(x)$", linestyle="--")
-plt.plot(x, func3, label=r"$ 3 \psi_{1}(x)$", linestyle="--")
+plt.plot(x, func1, label=r"$ \psi_{0}(x)$", linestyle="--")
+plt.plot(x, func2, label=r"$ \psi_{0.5}(x)$", linestyle="--")
+plt.plot(x, func3, label=r"$ \psi_{1}(x)$", linestyle="--")
 plt.plot(x, func_sum, label="sum of bases")
 
 plt.xlabel("x")

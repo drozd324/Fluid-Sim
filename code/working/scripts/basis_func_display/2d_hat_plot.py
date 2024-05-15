@@ -1,5 +1,5 @@
 """
-Plotting of 2dim hat function, which becomes our basis function.
+Plotting of 2dim hat function
 """
 
 import numpy as np
@@ -21,6 +21,9 @@ X, Y = np.meshgrid(x, y)
 fig = plt.figure()
 ax = plt.axes(projection ='3d')
 
-ax.plot_surface(X, Y, bf.hat_2d((0.5, 0.5), (X, Y), .5/2), cmap="viridis")
+ax.plot_surface(X, Y, bf.hat_2d((0.5, 0.5), (X, Y), .25), cmap="viridis")
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_zlabel(r'$\phi_{\frac{1}{2},\frac{1}{2}}(x,y)$')
 plt.savefig("hat_basis_2d.png", dpi=500)
 plt.show()

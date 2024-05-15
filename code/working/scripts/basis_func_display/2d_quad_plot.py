@@ -1,3 +1,8 @@
+"""
+Plotting of 2dim quadratic basis functions
+"""
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -9,7 +14,9 @@ sys.path.append(top_dir)
 
 from tools import basis_functions as bf 
 
-N = 100
+
+
+N = 200
 x = np.linspace(0, 1, N)
 y = np.linspace(0, 1, N)
 X, Y = np.meshgrid(x, y)

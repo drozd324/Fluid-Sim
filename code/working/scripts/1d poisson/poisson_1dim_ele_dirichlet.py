@@ -13,8 +13,10 @@ top_dir = os.path.abspath(os.path.join(current_dir, "..", ".."))
 sys.path.append(top_dir)
 
 from tools import basis_functions as bf
+from tools import norms as nrm
 
 N = 200
+num_step = 10000 # number of steps in calculation of integrals
 
 def solve_poisson(H):   
     """Container function for main part of code. The purpose of this is to create an easy way to 
@@ -31,7 +33,6 @@ def solve_poisson(H):
     elements = [[vertices[i], vertices[i+1]] for i in range(H-1)]
     h = vertices[1] - vertices[0]
 
-    num_step = 10000 # number of steps in calculation of integrals
 
     def force(x):
         return -x
@@ -76,7 +77,7 @@ def solve_poisson(H):
 
 
 poisson_sols = []
-vert_num = [50]#[3, 5, 20]
+vert_num = [3, 5, 20]
 for num in vert_num:
     sol = solve_poisson(num)
     poisson_sols.append(sol)
@@ -98,3 +99,10 @@ for i in range(len(vert_num)):
     plt.colorbar()
     plt.show()
     #plt.savefig(f"(Poisson_1d)_(lin_matrix_A)_(vertex_num_{H})")
+    
+""" a method of measuring how accurate our solutions are would be to use a norm on functions.
+There is an $L^2$ norm which is used to comapare functions. We would simply take the difference 
+of our solution and its analytical solution and throw it into this norm.
+"""
+
+print()

@@ -11,10 +11,10 @@ sys.path.append(top_dir)
 from tools import basis_functions as bf
 from tools import vector_products as vp
 
-steps = 500 # accuracy or steps in integrals
+steps = 200 # accuracy or steps in integrals
 
 # defining mesh
-H = 3 + (2*3)
+H = 3 + (2*4)
 x = np.linspace(0, 1, H)
 y = np.linspace(0, 1, H)
 X, Y = np.meshgrid(x, y)
@@ -34,37 +34,17 @@ for i in list(np.arange(0, H-1, 2)):
         quad_elements.append(element)
 
 # manufacturing solutions to stokes equation
+
 nu = 1 # viscocity
-u_1 = lambda x: 2*np.pi*(1 - np.cos(2*np.pi*x[0]))*np.sin(2*np.pi*x[1])
-u_2 = lambda x: -2*np.pi*(1 - np.cos(2*np.pi*x[1]))*np.sin(2*np.pi*x[0])
-
-p = lambda x: np.sin(2*np.pi*x[0]) * np.sin(2*np.pi*x[1])
-
-# first derivatives
-dx_p = lambda x: np.gradient(p(x), h, edge_order=2)[1]
-dy_p = lambda x: np.gradient(p(x), h, edge_order=2)[0]
-
-dx_u1 = lambda x: np.gradient(u_1(x), h, edge_order=2)[1]
-dy_u1 = lambda x: np.gradient(u_1(x), h, edge_order=2)[0]
-
-dx_u2 = lambda x: np.gradient(u_2(x), h, edge_order=2)[1]
-dy_u2 = lambda x: np.gradient(u_2(x), h, edge_order=2)[0]
-
-# second derivatives
-ddx_u1 = lambda x: np.gradient(dx_u1(x), h, edge_order=2)[1]
-ddy_u1 = lambda x: np.gradient(dy_u1(x), h, edge_order=2)[0]
-
-ddx_u2 = lambda x: np.gradient(dx_u2(x), h, edge_order=2)[1]
-ddy_u2 = lambda x: np.gradient(dy_u2(x), h, edge_order=2)[0]
 
 # declaring appropriate forcing functions
-f_1 = lambda x: (nu*(ddx_u1(x) + ddy_u1(x))) - dx_p(x)
-f_2 = lambda x: (nu*(ddx_u2(x) + ddy_u2(x))) - dy_p(x)
+f_1 = lambda x: x[0]
+f_2 = lambda x: x[1]
 
 # declaring appropriate funtions for block matrices
 gdg        = lambda vert0, vert1, x, h:  nu * vp.grad_dot_grad(bf.psi_2d(vert0, x, h), bf.psi_2d(vert1, x, h) , h)
-hat_dx_psi = lambda vert0, vert1, x, h:  -bf.phi_2d(vert0, x, h) * (np.gradient(bf.psi_2d(vert1, x, h), h)[1])
-hat_dy_psi = lambda vert0, vert1, x, h:  -bf.phi_2d(vert0, x, h) * (np.gradient(bf.psi_2d(vert1, x, h), h)[0])
+hat_dx_psi = lambda vert0, vert1, x, h:  bf.phi_2d(vert0, x, h) * (np.gradient(bf.psi_2d(vert1, x, h), h)[1])
+hat_dy_psi = lambda vert0, vert1, x, h:  bf.phi_2d(vert0, x, h) * (np.gradient(bf.psi_2d(vert1, x, h), h)[0])
 
 #gdg        = lambda vert0, vert1, x, h: nu * vp.grad_dot_grad_psi2d(vert0, vert1, x, h)
 #hat_dx_psi = lambda vert0, vert1, x, h: bf.phi_2d(vert0, x, h) * bf.dx_psi_2d(vert1, x, h)

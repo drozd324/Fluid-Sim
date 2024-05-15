@@ -15,15 +15,23 @@ sys.path.append(top_dir)
 from tools import basis_functions as bf
 
 N = 200
+num_step = 10000
 
 def solve_poisson(H):    
-    #H = 50 # number of vertices
+    """Container function for main part of code. The purpose of this is to create an easy way to 
+    run solver with various parameters.
+
+    Args:
+        H (int): number of nodes
+
+    Returns:
+        _type_: _description_
+    """ 
+    
     vertices = list(np.linspace(0, 1, H))
     print(vertices)
     elements = [[vertices[i], vertices[i+1]] for i in range(H-1)]
     h = vertices[1] - vertices[0]
-    precision = 0.0001 # precision in integration in each element
-    num_step = round(1/precision)
 
     def force(x):
         return -2

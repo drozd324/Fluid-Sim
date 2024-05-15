@@ -13,7 +13,7 @@ from tools import basis_functions as bf
 from tools import vector_products as vp
 
 steps = 100 # accuracy or steps in integrals
- 
+
 # defining mesh
 H = 7
 x = np.linspace(0, 1, H)
@@ -25,16 +25,17 @@ elements = [[[x[i]  , y[j]  ],
              [x[i+1], y[j]  ], 
              [x[i]  , y[j+1]], 
              [x[i+1], y[j+1]]] for i in range(H-1) for j in range(H-1)]
- 
+
 # declaring time stepping nececities
 dt = .01 # change in time
 time_steps = 50 # amount of iterations we want
-u_0 = [np.sin(np.pi*x[0]) * np.sin(np.pi*x[1]) for x in vertices] # inital condtions at time=0
+#u_0 = [np.sin(np.pi*x[0]) * np.sin(np.pi*x[1]) for x in vertices] # inital condtions at time=0
+u_0 = [0 for x in vertices] # inital condtions at time=0
 u_sols = [u_0] # list for keeping track of evolution of system
 A_sols = []
 
 def force(x, t):
-    return 0
+    return ((2*(np.pi**2)*t) + 1) * np.sin(np.pi*x[0]) * np.sin(np.pi*x[1])
 
 # functions for calculation the entries of matrices
 def f(vert, x, u, time):
@@ -90,20 +91,20 @@ fps = frn//3
 
 def change_plot(frame_number, func_u_sols, plot):
    plot[0].remove()  
-   plot[0] = ax.plot_surface(X, Y, func_u_sols[frame_number], cmap="plasma", vmin=0, vmax=1)
+   plot[0] = ax.plot_surface(X, Y, func_u_sols[frame_number], cmap="plasma", vmin=0, vmax=.5)
 
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
 plot = [ax.plot_surface(X, Y, func_u_sols[0])]
-ax.set_zlim(0, 1)
+ax.set_zlim(0, .5)
 ax.set_xlabel("x")
 ax.set_ylabel("y")
 ax.set_zlabel("u(x, y, t)")
-ax.set_title(r"$ \frac{\partial u}{\partial t} = \nabla^2 u $ with $u(x,y,0) = sin(\pi x)sin(\pi y)$")
+ax.set_title(r"$ \frac{\partial u}{\partial t} - \nabla^2 u = (2 \pi ^2 t + 1)sin(\pi x)sin(\pi y)$ with $u(x,y,0) = 0$")
 
 ani = animation.FuncAnimation(fig, change_plot, frn, fargs=(func_u_sols, plot), interval=1000 / fps)
-#fn = 'plot'
-#ani.save(fn+'.gif',writer='PillowWriter',fps=fps, dpi=400)
+fn = 'plot'
+ani.save(fn+'.gif',writer='PillowWriter',fps=fps, dpi=400)
 plt.show()
 
 # plot of matrix for first iteration
@@ -117,30 +118,30 @@ plt.clf()
 iter1 = 0
 fig = plt.figure()
 ax = plt.axes(projection ='3d')
-ax.axes.set_zlim3d(bottom=0, top=1) 
-ax.plot_surface(X, Y, func_u_sols[iter1], cmap="plasma", vmin=0, vmax=1)
+ax.axes.set_zlim3d(bottom=0, top=.5) 
+ax.plot_surface(X, Y, func_u_sols[iter1], cmap="plasma", vmin=0, vmax=.5)
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_zlabel(f'$u(x, y, {iter1*dt})$')
 plt.savefig(f"heat_equ_iter{iter1}", dpi=400)
 
 plt.clf()
-iter2 = int(len_u_sols/12)
+iter2 = int(len_u_sols*(1/3))
 fig = plt.figure()
 ax = plt.axes(projection ='3d')
-ax.axes.set_zlim3d(bottom=0, top=1) 
-ax.plot_surface(X, Y, func_u_sols[iter2], cmap="plasma", vmin=0, vmax=1)
+ax.axes.set_zlim3d(bottom=0, top=.5) 
+ax.plot_surface(X, Y, func_u_sols[iter2], cmap="plasma", vmin=0, vmax=.5)
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_zlabel(f'$u(x, y, {iter2*dt})$')
 plt.savefig(f"heat_equ_iter{iter2}", dpi=400)
 
 plt.clf()
-iter3 = int(len_u_sols/6)
+iter3 = int(len_u_sols*(2/3))
 fig = plt.figure()
 ax = plt.axes(projection ='3d')
-ax.axes.set_zlim3d(bottom=0, top=1) 
-ax.plot_surface(X, Y, func_u_sols[iter3], cmap="plasma", vmin=0, vmax=1)
+ax.axes.set_zlim3d(bottom=0, top=.5) 
+ax.plot_surface(X, Y, func_u_sols[iter3], cmap="plasma", vmin=0, vmax=.5)
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_zlabel(f'$u(x, y, {iter3*dt})$')
@@ -150,9 +151,10 @@ plt.clf()
 iter4 = time_steps
 fig = plt.figure()
 ax = plt.axes(projection ='3d')
-ax.axes.set_zlim3d(bottom=0, top=1) 
-ax.plot_surface(X, Y, func_u_sols[iter4], cmap="plasma", vmin=0, vmax=1)
+ax.axes.set_zlim3d(bottom=0, top=.5) 
+ax.plot_surface(X, Y, func_u_sols[iter4], cmap="plasma", vmin=0, vmax=.5)
 ax.set_xlabel('x')
 ax.set_ylabel('y')
 ax.set_zlabel(f'$u(x, y, {iter4*dt})$')
 plt.savefig(f"heat_equ_iter{iter4}", dpi=400)
+
