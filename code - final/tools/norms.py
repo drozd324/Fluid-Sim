@@ -1,11 +1,11 @@
 """
-Defining norms on for functions to find error in calcualtions
+Defining norms on functions to find error in calcualtions
 """
 
 import numpy as np
 
 def l_squ_norm(f, x0):
-    """The l squared norm for funcions of one variable, or here for 1 dimensional arrays.
+    """The l squared norm for functions of one variable, or here for 1 dimensional arrays.
 
     Args:
         f (numpy array): function given by numpy array
@@ -17,7 +17,7 @@ def l_squ_norm(f, x0):
     return np.trapz( np.abs(f)**2 , x0, axis=0)
 
 def l_squ_norm_2d(f, x0):
-    """The l squared norm for funcions of two variable, or here for 2 dimensional arrays.
+    """The l squared norm for functions of two variable, or here for 2 dimensional arrays.
 
     Args:
         f (numpy array): function given by numpy array

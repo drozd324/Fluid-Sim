@@ -180,7 +180,12 @@ ax.set_ylabel('y')
 ax.set_zlabel(f'$u(x, y, {iter4*dt})$')
 #plt.savefig(f"heat_equ_iter{iter4}", dpi=400)
 
-#error check at t=0 
-math_sol = lambda x, t: t*np.sin(np.pi *x[0])*np.sin(np.pi *x[1])
-error = nrm.l_squ_norm_2d(func_u_sols[0] - math_sol((x, y), 0))
-print(f"error = {error}")
+#error check 
+sum_error = 0
+for t in range(time_steps):
+    math_sol = lambda x, t: t*np.sin(np.pi *x[0])*np.sin(np.pi *x[1])
+    error = nrm.l_squ_norm_2d(func_u_sols[t] - math_sol((X, Y), dt*t), (x, y))
+    sum_error += error
+    
+avg_error = sum_error/time_steps    
+print(f"avarage l squared norm error with {H**2} nodes = {avg_error}")

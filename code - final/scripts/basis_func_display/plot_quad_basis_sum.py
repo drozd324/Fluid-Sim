@@ -1,5 +1,5 @@
 """
-Plotting of a sum of quadratic basis function on one element
+Plotting of a sum of quadratic basis functions on one element
 """
 
 import numpy as np

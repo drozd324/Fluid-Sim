@@ -1,7 +1,15 @@
 """
 This script solves the 1 dimensional poisson probelem with neumann boudary conditions. 
 
+with solution
 
+------ in LateX code ------
+
+$u(x) = \frac{1}{6} x(x^2-1) 
+
+and forcing function 
+
+$f(x) = x
 
 """
 
@@ -18,8 +26,8 @@ from tools import basis_functions as bf
 from tools import norms as nrm
 
 
-N = 200
-num_step = 10000
+steps = 10000 # number of steps in calculation of integrals
+N = 200 # number of points to evaluate solution for when plotting
 
 def solve_poisson(H):    
     """Container function for main part of code. The purpose of this is to create an easy way to 
@@ -70,7 +78,7 @@ def solve_poisson(H):
         return temp(1) - temp(0)
 
     for ele in elements:
-        x = np.linspace(ele[0], ele[1], num_step)
+        x = np.linspace(ele[0], ele[1], steps)
         
         for vert0 in ele:
             j = vertices.index(vert0)

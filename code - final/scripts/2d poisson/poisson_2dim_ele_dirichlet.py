@@ -1,7 +1,7 @@
 """
 Script solving the 2d poisson problem with dirichlet boudary conditions. 
 
-With manfactured forcing function 
+With manufactured forcing function 
 
 --------- in LateX code-----------
 
@@ -27,10 +27,12 @@ from tools import basis_functions as bf
 from tools import vector_products as vp
 from tools import norms as nrm
 
-steps = 200 # accuracy or steps in integrals
- 
+# main parameters to change
+steps = 1000 # accuracy or steps in integrals, make this smaller for significantly quicker run time
+H = 5 # $H^2$ is the number of nodes in the mesh, tweak this parameter to got a denser mesh 
+# important to increase steps along side H
+
 # defining mesh
-H = 7
 x = np.linspace(0, 1, H)
 y = np.linspace(0, 1, H)
 h = x[1] - x[0]
@@ -40,10 +42,8 @@ elements = [[[x[i]  , y[j]  ],
              [x[i]  , y[j+1]], 
              [x[i+1], y[j+1]]] for i in range(H-1) for j in range(H-1)]
 
- 
-A = np.zeros((H**2, H**2))
-F = np.zeros((H**2))
 
+# defining functions for integrands
 def force(x):
     return -2*(np.pi**2)*np.sin(np.pi*x[0])*np.sin(np.pi*x[1])
 
@@ -53,6 +53,8 @@ def f(vert, x):
 def a(vert0, vert1, x):
     return vp.grad_dot_grad_phi2d(vert0, vert1, x, h)
 
+A = np.zeros((H**2, H**2))
+F = np.zeros((H**2))
 
 t0 = time.time()
 for k, ele in enumerate(elements):
@@ -74,7 +76,7 @@ for k, ele in enumerate(elements):
 t1 = time.time()
 print(f"time taken: {(t1-t0)/60} minutes")
 
-# this is soling the matrix equation Ax = F
+# this is solving the matrix equation Au = F
 solution = np.matmul(np.linalg.pinv(A), F)
 
 # the rest is plotting
@@ -100,4 +102,4 @@ plt.show()
 #error check
 math_sol = lambda x: -np.sin(np.pi*x[0])*np.sin(np.pi*x[1])
 ele_sol = bf.conv_sol(solution, (X0, Y0), bf.phi_2d, vertices, h)
-print(f"L squared norm error = {nrm.l_squ_norm_2d(ele_sol - math_sol((X0, Y0)), (x0, y0))}")
+print(f"L squared norm error with {H**2} nodes = {nrm.l_squ_norm_2d(ele_sol - math_sol((X0, Y0)), (x0, y0))}")

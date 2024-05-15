@@ -10,10 +10,10 @@ sys.path.append(top_dir)
 from tools import basis_functions as bf
 
 """-------------------------------------- APPROXIMATE VECTOR PRODUCTS -------------------------------------------------"""
-# this section contains funcions which will predominatnly use the numpy gradient function to calculate derivatives
+# this section contains functions which will predominantly use the numpy gradient function to calculate derivatives
 
 def grad_dot_grad(func0, func1, h):
-    """returns a dot product of gradients of two functions of two varibles.
+    """returns a dot product of gradients of two functions of two variables.
     ie, grad(func0) dot grad(func1)
 
     Args:
@@ -36,7 +36,7 @@ def func_mul_pdfunc(func0, func1, h, axis):
     Args:
         func0 (function): a numpy function of two variables
         func1 (function): a numpy function of two variables
-        axis (0 or 1): pick 0 for partial derivative with respect to x or 1 for partial derivative with respect to y
+        axis (0 or 1): pick 1 for partial derivative with respect to x or 0 for partial derivative with respect to y
 
     Returns:
         numpy array:

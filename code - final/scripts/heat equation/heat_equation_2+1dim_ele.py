@@ -39,17 +39,17 @@ elements = [[[x[i]  , y[j]  ],
              [x[i]  , y[j+1]], 
              [x[i+1], y[j+1]]] for i in range(H-1) for j in range(H-1)]
  
-# declaring time stepping nececities
+# declaring time stepping necessities
 dt = .01 # change in time
 time_steps = 50 # amount of iterations we want
-u_0 = [np.sin(np.pi*x[0]) * np.sin(np.pi*x[1]) for x in vertices] # inital condtions at time=0
+u_0 = [np.sin(np.pi*x[0]) * np.sin(np.pi*x[1]) for x in vertices] # initial condtions at time=0
 u_sols = [u_0] # list for keeping track of evolution of system
 A_sols = []
 
 def force(x, t):
     return 0
 
-# functions for calculation the entries of matrices
+# functions for calculating the entries of matrices
 def f(vert, x, u, time):
     return (u + (dt * force(x, time))) * bf.phi_2d(vert, x, h)
 
@@ -63,7 +63,7 @@ for t in range(time_steps): #time stepping loop
     
     # main code, iterating over elements and calculating entries of matrix
     for k, ele in enumerate(elements):
-        # creating domain of element to interate over
+        # creating domain of element to iterate over
         x0 = np.linspace(ele[0][0], ele[3][0], steps)
         y0 = np.linspace(ele[0][1], ele[3][1], steps)
         X0, Y0 = np.meshgrid(x0, y0)
@@ -90,7 +90,7 @@ for t in range(time_steps): #time stepping loop
 t1 = time.time()
 print(f"time taken: {(t1-t0)/60} minutes")
 
-# creating mesh with higher resolution for ploting
+# creating mesh with higher resolution for plotting
 N = 4*H
 x = np.linspace(0, 1, N)
 y = np.linspace(0, 1, N)

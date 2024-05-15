@@ -1,5 +1,16 @@
 """
-This script solves the 1 dimensional poisson probelem with dirchlet boudary conditions. Section 3 in report
+This script solves the 1 dimensional poisson problem with dirichlet boundary conditions.
+
+with solution
+
+------ in LateX code ------
+
+$u(x) = \frac{1}{2} x(x-1) 
+
+and forcing function 
+
+$f(x) = 1
+
 """
 
 import numpy as np
@@ -15,7 +26,7 @@ from tools import basis_functions as bf
 from tools import norms as nrm
 
 N = 200
-num_step = 10000 # number of steps in calculation of integrals
+steps = 10000 # number of steps in calculation of integrals
 
 def solve_poisson(H):   
     """Container function for main part of code. The purpose of this is to create an easy way to 
@@ -32,17 +43,18 @@ def solve_poisson(H):
     elements = [[vertices[i], vertices[i+1]] for i in range(H-1)]
     h = vertices[1] - vertices[0]
 
-    #defining basis functions and their derivatives. This was done initially to swap out linear basis functions to quadratic basis function just because we can
+    # defining basis functions and their derivatives. This was done initially to swap out linear basis functions to quadratic basis function just because we can
     def basis_func(vert, x):
         return bf.phi(vert, x, h)
 
     def d_basis_func(vert, x):
         return bf.grad_phi(vert, x, h)
 
+
     def force(x):
         return -1
 
-    #defining matrix to calculate entries for
+    # defining matrix to calculate entries for
     A = np.zeros((H, H))
     F = np.zeros((H))
     
@@ -55,7 +67,7 @@ def solve_poisson(H):
 
     # main bit of code iterating over elements of mesh (here a 1dim line) and calcualting entries of the matrices
     for ele in elements:
-        x = np.linspace(ele[0], ele[1], num_step)
+        x = np.linspace(ele[0], ele[1], steps)
         
         for vert0 in ele:
             j = vertices.index(vert0)

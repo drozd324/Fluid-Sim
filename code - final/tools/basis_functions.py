@@ -102,7 +102,7 @@ def dy_hat_2d(i, x, h):
 """-------------------- QUADRATIC BASIS FUNCTIONS -----------------------"""
 
 def quad_o(i, x, h):
-    """function to generate "even" components of the quadratic basis
+    """function to generate even components of the quadratic basis
 
     Args:
         i (_float_): position of peak
@@ -116,7 +116,7 @@ def quad_o(i, x, h):
                            [0         , lambda x: 1 - ((x-i)/h)**2      , 0                 ])
     
 def quad_e(i, x, h):
-    """function to generate "odd" components of quadratic basis
+    """function to generate odd components of quadratic basis
 
     Args:
         i (_float_): position of peak
@@ -166,7 +166,7 @@ def psi(i, x, h, boundary=[0, 1]):
     Args:
         i (float): peak of function
         x (float): variable
-        h (float): half the with of element
+        h (float): half the width of element
         boundary (list, optional): boundary of domain. Defaults to [0, 1].
 
     Returns:
@@ -178,12 +178,12 @@ def psi(i, x, h, boundary=[0, 1]):
         return quad(i, x, h)
     
 def grad_psi(i, x, h, boundary=[0, 1]):
-    """Piecewise Quadratic basis fuction with peak at i and element of size 2*h
+    """Piecewise quadratic basis function with peak at i and element of size 2*h
 
     Args:
         i (float): peak of function
         x (float): variable
-        h (float): half the with of element
+        h (float): half the width of element
         boundary (list, optional): boundary of domain. Defaults to [0, 1].
 
     Returns:
@@ -196,12 +196,12 @@ def grad_psi(i, x, h, boundary=[0, 1]):
 
     
 def psi_2d(i, x, h):
-    """Piecewise Quadratic 2 dimensional basis fuction with peak at i and element of size (2*h)**2
+    """Piecewise Quadratic 2 dimensional basis function with peak at i and element of size (2*h)**2
 
     Args:
         i (float): peak of function
         x (float): variable
-        h (float): half the with of element
+        h (float): half the width of element
 
     Returns:
         float:
@@ -214,7 +214,7 @@ def dx_psi_2d(i, x, h):
     Args:
         i (float): peak of function
         x (float): variable
-        h (float): half the with of element
+        h (float): half the width of element
 
     Returns:
         float:
@@ -228,7 +228,7 @@ def dy_psi_2d(i, x, h):
     Args:
         i (float): peak of function
         x (float): variable
-        h (float): half the with of element
+        h (float): half the width of element
 
     Returns:
         float:
@@ -241,15 +241,15 @@ def dy_psi_2d(i, x, h):
 
 
 def conv_sol(solution, x, basis_func, vertices, h):
-    """Converts a solution vector (an array) into an interpolated function on x with corresponing
+    """Converts a solution vector (an array) into an interpolated function on x with corresponding
     basis functions (basis_func).
 
     Args:
-        solution (numpy array): solution vector 'u' to matrix equation Au=F
+        solution (numpy array): solution vector u to matrix equation Au=F
         x (numpy array): domain over which we want this new function over
         basis_func (function): one of the basis functions. The function is a variable here so do not 
         put in any variables into it.
-        vertices (list): list of vertices which correspont to each entry of the solution vector 'u'
+        vertices (list): list of vertices which correspond to each entry of the solution vector u
         h (float): width of element. This is the same h as you would have used in defining your mesh
 
     Returns:
